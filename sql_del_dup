@@ -1,0 +1,81 @@
+al  | brand         | color | make |
++------+--------+---------------+-------+------+
+|    2 | eqs    | mercerdsbenze | black | 2022 |
+|    4 | inoq   | hondai        | white | 2021 |
+|    5 | inoq   | hondai        | white | 2021 |
+|    1 | modal5 | telsa         | red   | 2018 |
+|    5 | modal5 | telsa         | blue  | 2021 |
+|    3 | ix     | honda         | org   | 2010 |
++------+--------+---------------+-------+------+
+
+1.
+
+delete from cars where id in(select max(id) from cars group by modal,brand having count(*)>1);
+
+2.
+ delete from cars where id in(select c2.id from cars c1 join cars c2 on c1.brand=c2.brand and c1.modal=c2.modal where c1.id<c2.id) ;
+
+3.
+
+select *,row_number() over (partition by brand,modal) as rn  from cars;
+ select id from (select *,row_number() over (partition by brand,modal) as rn  from cars) as x where x.rn>1
+delete from cars where id in (select id from (select *,row_number() over (partition by brand,modal) as rn  from cars) as x where x.rn>1);
+
+
+4.min (multiple rows deleted with this) ***not recommanded
+
+select modal,brand from cars group by brand,modal;
+select modal,brand ,min(id) from cars group by brand,modal;
+ delete from cars where id not in (select min(id) from cars group by brand,modal);
+
+
+5.backup data
+ create table back_up as select * from cars where 1=2;
+ insert into back_up select * from cars where id in ( select min(id) from cars group by brand,modal);
+then  remove cars table and rename back_up table name with cars 
+
+alter table back_up rename to cars;
+
+
+6 back_up but not delete the original table
+
+create table back_up as select * from cars where 1=2;
+ insert into back_up select * from cars where id in ( select min(id) from cars group by brand,modal);
+
+truncate table cars;
+ insert into cars select * from back_up;
+
+then delete the back_up table
+
+
+7.using ctid( all the records in same  row are same but we want to remains 1 original)
+
+CTID-it available in bosco sql>>>>>>we do not have alternate row id to mysql 
+rowid-"   "           oracle 
+
+
+select *,ctid from cars;
+
+delete from cars where ctid in(select max(ctid) from cars group by modal,brand having count(*)>1);
+
+MYSQL And all 
+
+create tempory unique id column
+alter table cars add column row_no int generated always as identity;
+delete from cars where row_no in(select max(row_no) from cars group by modal,brand having count(*)>1);
+
+
+8. back up
+
+
+create table back_up as select distinct * from cars;
+drop the original table;
+alter table back_up rename to cars;
+
+9
+  create table back_up as select distinct * from cars;
+   trunctae orinal table 
+  insert into cars select * from back_up ;
+drop table back_up;
+
+
