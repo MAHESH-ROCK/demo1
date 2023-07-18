@@ -1,0 +1,23 @@
+
+C:\Users\dell\AppData\Local\Google\Cloud SDK>bq mk -d view_table
+Dataset 'mahesh-123123:view_table' successfully created.
+
+C:\Users\dell\AppData\Local\Google\Cloud SDK>create view view_table.cards as select SYS_DT,CREDIT_CARD_ORG_ID,TRAN_FINAL_ACT_VAL,ITRAN_CAT_CDE from hist_cards.hist_cards_table
+'create' is not recognized as an internal or external command,
+operable program or batch file.
+
+C:\Users\dell\AppData\Local\Google\Cloud SDK>bq query --use_legacy_sql=false create view view_table.cards as select SYS_DT,CREDIT_CARD_ORG_ID,TRAN_FINAL_ACT_VAL,ITRAN_CAT_CDE from hist_cards.hist_cards_table
+Waiting on bqjob_r75bdfa6c11831c8c_0000018920eae3fd_1 ... (0s) Current status: DONE
+Created mahesh-123123.view_table.cards
+
+
+C:\Users\dell\AppData\Local\Google\Cloud SDK>bq --use_legacy_sql=false create view view_table.cards1 as select * from hist_cards.hist_cards_table where PROD_NAME='VISA'
+FATAL Flags parsing error: Unknown command line flag 'use_legacy_sql'
+Run 'bq.py help' to get help
+
+C:\Users\dell\AppData\Local\Google\Cloud SDK>bq query --use_legacy_sql=false create view view_table.cards1 as select * from hist_cards.hist_cards_table where PROD_NAME='VISA'
+Waiting on bqjob_r1c7239fd4f88f817_0000018920ee6ffd_1 ... (0s) Current status: DONE
+Created mahesh-123123.view_table.cards1
+
+
+C:\Users\dell\AppData\Local\Google\Cloud SDK>
