@@ -1,4 +1,4 @@
-[
+0[
   {
     "OrderID": 1001,
     "CustomerID": "C001",
@@ -31,7 +31,7 @@
     "OrderID": 1002,
     "CustomerID": "C005",
     "OrderDate": "2024-05-03T15:00:00Z",
-    "UpdatedDate": "2024-05-09T9:00:00Z",
+    "UpdatedDate": "2024-05-09T09:00:00Z",
     "Amount": 230.0
   }
 ]
